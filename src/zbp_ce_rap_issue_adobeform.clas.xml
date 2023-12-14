@@ -3,13 +3,15 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_RAP_ISSUE_ADOBE_FORMS</CLSNAME>
+    <CLSNAME>ZBP_CE_RAP_ISSUE_ADOBEFORM</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>RAP Issue - Adobe Forms</DESCRIPT>
+    <DESCRIPT>Behavior Implementation for ZCE_RAP_ISSUE_ADOBEFORM</DESCRIPT>
+    <CATEGORY>06</CATEGORY>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>5</UNICODE>
+    <CLSDEFINT>ZCE_RAP_ISSUE_ADOBEFORM</CLSDEFINT>
    </VSEOCLASS>
   </asx:values>
  </asx:abap>

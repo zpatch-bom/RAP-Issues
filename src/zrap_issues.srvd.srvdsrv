@@ -1,0 +1,4 @@
+@EndUserText.label: 'RAP Issues'
+define service ZRAP_ISSUES {
+  expose ZCE_RAP_Issue_AdobeForm as I1_AdobeForm;
+}

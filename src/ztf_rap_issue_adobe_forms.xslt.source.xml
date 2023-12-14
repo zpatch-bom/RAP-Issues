@@ -1,0 +1,13 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary" xmlns:def="http://www.sap.com/abapxml/types/defined" xmlns:pool_ZCL_RAP_ISSUE_ADOBE_FORMS=
+"http://www.sap.com/abapxml/types/class-pool/ZCL_RAP_ISSUE_ADOBE_FORMS">
+  <tt:root name="CONTENT" type="pool_ZCL_RAP_ISSUE_ADOBE_FORMS:TY_ENTITY"/>
+  <tt:template>
+    <Form>
+      <ZCE_RAP_Issue_AdobeForm>
+        <Product tt:value-ref=".CONTENT.PRODUCT"/>
+        <ProductName tt:value-ref=".CONTENT.PRODUCTNAME"/>
+      </ZCE_RAP_Issue_AdobeForm>
+    </Form>
+  </tt:template>
+</tt:transform>

@@ -5,18 +5,38 @@ CLASS zcl_rap_issue_adobe_forms DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
+*    For Custom Entity
+    INTERFACES:
+      if_rap_query_provider.
+
+    TYPES:
+      ty_entity   TYPE ZCE_RAP_Issue_AdobeForm,
+      tt_entities TYPE SORTED TABLE OF ty_entity WITH UNIQUE KEY Product.
+
     CLASS-METHODS get_form_template
       RETURNING
-        value(rv_xdp) TYPE xstring.
-    CLASS-METHODS get_xml_data
+        VALUE(rv_xdp) TYPE xstring.
+
+    METHODS generate_xml_data
+      IMPORTING
+        is_entity     TYPE ty_entity
       RETURNING
-        value(rv_xml) TYPE xstring.
+        VALUE(rv_xml) TYPE xstring.
+
+    CLASS-METHODS get_all_entities
+      RETURNING
+        VALUE(rt_data) TYPE tt_entities.
+
 
   PROTECTED SECTION.
     METHODS: main REDEFINITION.
 
+
   PRIVATE SECTION.
 
+    METHODS: __console_write
+      IMPORTING
+        i_value TYPE any.
 ENDCLASS.
 
 
@@ -24,16 +44,64 @@ ENDCLASS.
 CLASS zcl_rap_issue_adobe_forms IMPLEMENTATION.
 
   METHOD main.
-    get_form_template( ).
+    __console_write( |Entity mock data:| ).
+    __console_write( lcl_mock=>entity_data ).
+    __console_write( |Form Template: { get_form_template( ) }| ).
+    __console_write( |XML Data: { xco_cp=>xstring( generate_xml_data( lcl_mock=>entity_data[ 1 ] )
+                                  )->as_string( xco_cp_character=>code_page->utf_8
+                                  )->value }| ).
   ENDMETHOD.
 
+  METHOD get_all_entities.
+    rt_data = lcl_mock=>entity_data.
+  ENDMETHOD.
 
   METHOD get_form_template.
+    rv_xdp = lcl_mock=>form_templete.
+  ENDMETHOD.
+
+  METHOD generate_xml_data.
+    CALL TRANSFORMATION ztf_rap_issue_adobe_forms
+      SOURCE content = is_entity
+      RESULT XML rv_xml.
+  ENDMETHOD.
+
+  METHOD if_rap_query_provider~select.
+
+    IF NOT io_request->is_data_requested(  ).
+      RETURN.
+    ENDIF.
+
+    IF io_request->get_entity_id( ) <> 'ZCE_RAP_ISSUE_ADOBEFORM'.
+      RETURN.
+    ENDIF.
+
+    DATA(lv_offset) = io_request->get_paging( )->get_offset( ).
+    DATA(lv_page_size) = io_request->get_paging( )->get_page_size( ).
+    DATA(lv_where) = io_request->get_filter( )->get_as_sql_string( ).
+
+    SELECT FROM @lcl_mock=>entity_data AS a
+      FIELDS
+        a~*
+      WHERE (lv_where)
+      ORDER BY
+        a~Product
+      INTO TABLE @DATA(lt_data)
+      UP TO @lv_page_size ROWS
+      OFFSET @lv_offset.
+    IF sy-subrc <> 0.
+      RETURN.
+    ENDIF.
+
+    io_response->set_data( lt_data ).
+    io_response->set_total_number_of_records( lines( lt_data ) ).
 
   ENDMETHOD.
 
-  METHOD get_xml_data.
-
+  METHOD __console_write.
+    IF out IS BOUND.
+      out->write( i_value ).
+    ENDIF.
   ENDMETHOD.
 
 ENDCLASS.
