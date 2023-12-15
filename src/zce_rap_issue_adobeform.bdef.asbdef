@@ -1,15 +1,9 @@
 unmanaged implementation in class zbp_ce_rap_issue_adobeform unique;
-//strict ( 2 ); //Uncomment this line in order to enable strict mode 2. The strict mode has two variants (strict(1), strict(2)) and is prerequisite to be future proof regarding syntax and to be able to release your BO.
+strict ( 2 );
 
-define behavior for ZCE_RAP_Issue_AdobeForm //alias <alias_name>
-//late numbering
-//lock master
-//authorization master ( instance )
-//etag master <field_name>
+define behavior for ZCE_RAP_Issue_AdobeForm alias I1
+lock master
+authorization master ( instance )
 {
-  //  create;
-  //  update;
-  //  delete;
   action GetPDF result [1] ZD_RAP_Issue_GetPDFResult;
-  action PrintPDF;
 }

@@ -17,7 +17,7 @@ CLASS zcl_rap_issue_adobe_forms DEFINITION
       RETURNING
         VALUE(rv_xdp) TYPE xstring.
 
-    METHODS generate_xml_data
+    CLASS-METHODS generate_xml_data
       IMPORTING
         is_entity     TYPE ty_entity
       RETURNING
@@ -50,6 +50,14 @@ CLASS zcl_rap_issue_adobe_forms IMPLEMENTATION.
     __console_write( |XML Data: { xco_cp=>xstring( generate_xml_data( lcl_mock=>entity_data[ 1 ] )
                                   )->as_string( xco_cp_character=>code_page->utf_8
                                   )->value }| ).
+
+*  DATA(lo_ft) = ycl_sde_adobe_form_template=>create( ).
+*  DATA(lv_xdp) =
+*    lo_ft->get_template_by_name(
+*      iv_get_binary    = abap_true
+*      iv_form_name     = 'RAP_Issue'
+*      iv_template_name = 'A5'
+*    )-xdp_template.
   ENDMETHOD.
 
   METHOD get_all_entities.
